@@ -1,0 +1,74 @@
+/* General styles for the entire login/signup page */
+.login-signup-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f4f4f4;
+    padding: 1rem;
+  }
+  
+  .login-signup-page h2 {
+    font-size: 2.2rem;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+  }
+  
+  .login-signup-page form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+  }
+  
+  .login-signup-page input {
+    margin-bottom: 1rem;
+    padding: 0.8rem;
+    font-size: 1rem;
+    border: 1px solid #bdc3c7;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+  }
+  
+  .login-signup-page input::placeholder {
+    color: #aaa;
+  }
+  
+  .login-signup-page input:focus {
+    border-color: #1abc9c;
+    outline: none;
+  }
+  
+  .login-signup-page button {
+    padding: 0.8rem;
+    font-size: 1rem;
+    background-color: #1abc9c;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .login-signup-page button:hover {
+    background-color: #16a085;
+  }
+  
+  .login-signup-page .error {
+    color: red;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .login-signup-page form {
+      padding: 1rem;
+    }
+  }
+  
