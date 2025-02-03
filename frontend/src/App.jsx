@@ -11,6 +11,8 @@ import LoginSignupPage from './components/LoginSignupPage';
 import JoinUsPage from './components/JoinUsPage';
 import DonatePage from './components/DonatePage';
 import AboutUsPage from './components/AboutUsPage';
+import AccountPage from './components/AccountPage';
+import ContactPage from './components/ContactPage'; // New Contact Page
 
 const App = () => {
   const [components, setComponents] = useState([]); // State to store environmental components
@@ -36,10 +38,12 @@ const App = () => {
   return (
     <Router>
       <div className="App">
+        {/* Display Navbar only if authenticated */}
         {isAuthenticated && <Navbar isAuthenticated={isAuthenticated} />}
+
         <main>
           <Routes>
-            {/* Redirect to login/signup if not authenticated */}
+            {/* Routes for when the user is not authenticated */}
             {!isAuthenticated ? (
               <>
                 <Route path="/login" element={<LoginSignupPage type="login" />} />
@@ -48,16 +52,21 @@ const App = () => {
               </>
             ) : (
               <>
+                {/* Routes for authenticated users */}
                 <Route path="/" element={<HomePage components={components} />} />
                 <Route path="/admin" element={<AdminPage />} />
                 <Route path="/join-us" element={<JoinUsPage />} />
                 <Route path="/donate" element={<DonatePage />} />
                 <Route path="/about-us" element={<AboutUsPage />} />
+                <Route path="/account" element={<AccountPage />} />
+                <Route path="/contact" element={<ContactPage />} /> {/* New Contact Page Route */}
                 <Route path="*" element={<Navigate to="/" />} />
               </>
             )}
           </Routes>
         </main>
+
+        {/* Display Footer only if authenticated */}
         {isAuthenticated && <Footer />}
       </div>
     </Router>

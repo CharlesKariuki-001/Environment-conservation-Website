@@ -1,8 +1,9 @@
 import React from 'react';
+import './Footer.css'; // Import the footer styles
 
 const Footer = () => {
   return (
-    <footer>
+    <footer className="footer">
       <p>&copy; 2025 Nature Net. All rights reserved.</p>
       <p>
         <a href="https://www.example.com/privacy-policy" target="_blank" rel="noopener noreferrer">
