@@ -1,26 +1,26 @@
 from flask import Flask
-from flask_cors import CORS  # Import CORS
+from flask_cors import CORS  
+from flask_jwt_extended import JWTManager  
 from .routes import main
-from .userRoutes import user_routes  # Import the new userRoutes blueprint
+from .userRoutes import user_routes  
 from .database import init_db
-from dotenv import load_dotenv  # Import dotenv to load environment variables
+from dotenv import load_dotenv  
 import os
 
 def create_app():
     app = Flask(__name__)
-    CORS(app)  # Enable CORS for the entire app
-    
-    # Load environment variables from .env file
+    CORS(app)  
+
     load_dotenv()
 
-    # Secret key for JWT (make sure to set a proper secret key)
-    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your_default_secret_key')  # Load secret key from env variable (optional)
+    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your_default_secret_key')  
+    app.config['JWT_SECRET_KEY'] = app.config['SECRET_KEY']  # Ensure JWT uses the same secret key
 
-    # Initialize MongoDB connection
+    JWTManager(app)  # Initialize JWT
+
     init_db(app)
 
-    # Register Blueprints for routes
-    app.register_blueprint(main)         # Register main routes (environment components)
-    app.register_blueprint(user_routes)  # Register user routes (login/signup)
+    app.register_blueprint(main)         
+    app.register_blueprint(user_routes)  
 
     return app

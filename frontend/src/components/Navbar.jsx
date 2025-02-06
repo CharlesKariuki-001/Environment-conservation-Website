@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { FaHome, FaLeaf, FaInfoCircle, FaEnvelope, FaUserCircle } from 'react-icons/fa'; // Import icons
+import { FaHome, FaLeaf, FaInfoCircle, FaEnvelope, FaUserCircle } from 'react-icons/fa';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -31,17 +31,15 @@ const Navbar = () => {
         <NavLink to="/" exact activeClassName="active">
           <FaHome className="nav-icon" /> Home
         </NavLink>
-        <NavLink to="/components" activeClassName="active">
+        <NavLink to="/environment-components" activeClassName="active">
           <FaLeaf className="nav-icon" /> Environmental Components
         </NavLink>
-        <NavLink to="/about" activeClassName="active">
+        <NavLink to="/about-us" activeClassName="active">
           <FaInfoCircle className="nav-icon" /> About Us
         </NavLink>
         <NavLink to="/contact" activeClassName="active">
           <FaEnvelope className="nav-icon" /> Contact
         </NavLink>
-
-        {/* Account Link with User Icon */}
         <NavLink to="/account" className="account-link">
           <FaUserCircle className="nav-icon" /> Account
         </NavLink>

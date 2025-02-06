@@ -12,15 +12,16 @@ import JoinUsPage from './components/JoinUsPage';
 import DonatePage from './components/DonatePage';
 import AboutUsPage from './components/AboutUsPage';
 import AccountPage from './components/AccountPage';
-import ContactPage from './components/ContactPage'; // New Contact Page
+import ContactPage from './components/ContactPage'; 
+import EnvironmentComponents from './components/EnvironmentComponents'; // ✅ Import EnvironmentComponents
 
 const App = () => {
-  const [components, setComponents] = useState([]); // State to store environmental components
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // For user authentication check
+  const [components, setComponents] = useState([]);
+  const [isAuthenticated, setIsAuthenticated] = useState(false); 
 
   // Fetch the environmental components from the backend API
   useEffect(() => {
-    const backendUrl = 'http://localhost:5000/api/environment-components'; // Replace with your backend URL
+    const backendUrl = 'http://localhost:5000/api/environment-components'; 
     fetch(backendUrl)
       .then((response) => response.json())
       .then((data) => setComponents(data))
@@ -31,19 +32,19 @@ const App = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      setIsAuthenticated(true); // If a token exists, user is authenticated
+      setIsAuthenticated(true); 
     }
   }, []);
 
   return (
     <Router>
       <div className="App">
-        {/* Display Navbar only if authenticated */}
+        {/* Only show Navbar if authenticated */}
         {isAuthenticated && <Navbar isAuthenticated={isAuthenticated} />}
 
         <main>
           <Routes>
-            {/* Routes for when the user is not authenticated */}
+            {/* Routes for users not authenticated */}
             {!isAuthenticated ? (
               <>
                 <Route path="/login" element={<LoginSignupPage type="login" />} />
@@ -59,14 +60,17 @@ const App = () => {
                 <Route path="/donate" element={<DonatePage />} />
                 <Route path="/about-us" element={<AboutUsPage />} />
                 <Route path="/account" element={<AccountPage />} />
-                <Route path="/contact" element={<ContactPage />} /> {/* New Contact Page Route */}
+                <Route path="/contact" element={<ContactPage />} />
+                <Route path="/environment-components" element={<EnvironmentComponents />} />
+                
+                {/* Fallback route */}
                 <Route path="*" element={<Navigate to="/" />} />
               </>
             )}
           </Routes>
         </main>
 
-        {/* Display Footer only if authenticated */}
+        {/* Only show Footer if authenticated */}
         {isAuthenticated && <Footer />}
       </div>
     </Router>

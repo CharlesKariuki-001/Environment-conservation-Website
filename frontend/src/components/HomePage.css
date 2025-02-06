@@ -1,16 +1,18 @@
-/* Main container - ensures full screen fit */
+/* Main container - ensures full screen fit and proper centering */
 .home-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100vh; /* Ensures it fills the entire screen */
+    min-height: 100vh; /* Ensures full screen fit */
     background: linear-gradient(to right, #2c3e50, #4caf50);
-    padding-top: 70px; /* Adjusted to prevent navbar overlap */
+    padding-top: 70px; /* Prevents navbar overlap */
     padding-bottom: 60px; /* Prevents footer overlap */
     text-align: center;
     color: white;
-    width: 100%;
+    width: 90%; /* Ensures equal spacing on left and right */
+    max-width: 1200px; /* Keeps layout structured on larger screens */
+    margin: 0 auto; /* Centers the content */
     overflow-x: hidden;
 }
 
@@ -34,21 +36,24 @@
     opacity: 0.9;
 }
 
-/* Features Section */
+/* Features Section - Now perfectly fits in a row of four */
 .features {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid */
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
     gap: 20px;
-    width: 90%;
-    max-width: 1000px;
+    width: 100%;
+    max-width: 1200px;
     margin-top: 30px;
 }
 
 .feature-card {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 15px;
+    background: rgba(0, 0, 0, 0.1);
+    padding: 20px;
     border-radius: 10px;
     text-align: center;
+    width: 23%; /* Makes sure four fit in one row */
+    min-width: 220px;
     transition: transform 0.2s ease-in-out;
 }
 
@@ -59,7 +64,7 @@
 .icon {
     font-size: 2rem;
     margin-bottom: 10px;
-    color: #4caf50;
+    color: #7be27e;
 }
 
 /* Interactive Section */
@@ -69,12 +74,13 @@
     justify-content: center;
     gap: 20px;
     margin-top: 40px;
-    width: 90%;
+    width: 100%;
+    max-width: 1200px;
 }
 
 .interactive-card {
     background: rgba(0, 0, 0, 0.6);
-    padding: 15px;
+    padding: 20px;
     border-radius: 10px;
     width: 300px;
     text-align: center;
@@ -143,7 +149,27 @@
 }
 
 /* Responsive Design */
+@media (max-width: 1024px) {
+    .home-container {
+        width: 95%;
+    }
+
+    .features {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .feature-card {
+        width: 45%; /* Two per row on medium screens */
+    }
+}
+
 @media (max-width: 768px) {
+    .home-container {
+        width: 100%;
+        padding: 20px;
+    }
+
     .hero h1 {
         font-size: 2rem;
     }
@@ -153,7 +179,12 @@
     }
 
     .features {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .feature-card {
+        width: 90%; /* Single column on mobile */
     }
 
     .cta-button {
