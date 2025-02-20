@@ -1,17 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { FaHome, FaLeaf, FaInfoCircle, FaEnvelope, FaUserCircle } from 'react-icons/fa';
+import React, { useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import { FaHome, FaLeaf, FaInfoCircle, FaEnvelope } from 'react-icons/fa';
 import './Navbar.css';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    setIsLoggedIn(!!token);
-  }, []);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -39,9 +32,6 @@ const Navbar = () => {
         </NavLink>
         <NavLink to="/contact" activeClassName="active">
           <FaEnvelope className="nav-icon" /> Contact
-        </NavLink>
-        <NavLink to="/account" className="account-link">
-          <FaUserCircle className="nav-icon" /> Account
         </NavLink>
       </div>
     </nav>

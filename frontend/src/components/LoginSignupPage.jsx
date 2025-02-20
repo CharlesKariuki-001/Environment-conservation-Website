@@ -1,10 +1,11 @@
+// LoginSignupPage.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './LoginSignupPage.css';
 
-const LoginSignupPage = () => {
-  const [isLogin, setIsLogin] = useState(true); // Controls login/signup mode
+const LoginSignupPage = ({ setIsAuthenticated }) => {
+  const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -15,16 +16,10 @@ const LoginSignupPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Toggle between Login and Signup
   const toggleForm = () => {
     setIsLogin(!isLogin);
     setError('');
-    setFormData({
-      username: '',
-      password: '',
-      email: '',
-      address: '',
-    });
+    setFormData({ username: '', password: '', email: '', address: '' });
   };
 
   const handleChange = (e) => {
@@ -34,29 +29,35 @@ const LoginSignupPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     if (!formData.username || !formData.password || (!isLogin && (!formData.email || !formData.address))) {
       setError('Please fill in all required fields!');
+      setIsLoading(false);
       return;
     }
 
-    setIsLoading(true);
     const url = isLogin ? 'http://localhost:5000/api/login' : 'http://localhost:5000/api/signup';
 
     try {
       const response = await axios.post(url, formData);
+      console.log("Response Data:", response.data); 
 
-      if (response.data.token) {
-        localStorage.setItem('token', response.data.token);
-        navigate(response.data.is_admin ? '/admin' : '/');
+      if (isLogin) {
+        if (response.data.token) {
+          sessionStorage.setItem('token', response.data.token);
+          sessionStorage.setItem('user', JSON.stringify(response.data.user));
+          setIsAuthenticated(true);
+          navigate(response.data.user.is_admin ? '/admin' : '/');
+        } else {
+          setError('Authentication failed. Please try again.');
+        }
       } else {
-        setError('Failed to authenticate. Please try again.');
-      }
-
-      if (!isLogin && response.data.message) {
         alert(response.data.message);
+        toggleForm(); 
       }
     } catch (err) {
+      console.error("API Error:", err.response);
       setError(err.response?.data?.message || 'An error occurred. Please try again.');
     } finally {
       setIsLoading(false);
@@ -77,15 +78,10 @@ const LoginSignupPage = () => {
               <input type="text" name="address" placeholder="Address" value={formData.address} onChange={handleChange} required />
             </>
           )}
-          <button type="submit" disabled={isLoading}>
-            {isLoading ? 'Processing...' : isLogin ? 'Login' : 'Sign Up'}
-          </button>
+          <button type="submit" disabled={isLoading}>{isLoading ? 'Processing...' : isLogin ? 'Login' : 'Sign Up'}</button>
         </form>
-        <p>
-          {isLogin ? "Don't have an account?" : "Already have an account?"}
-          <button onClick={toggleForm} className="switch-form-btn">
-            {isLogin ? ' Sign up here' : ' Login here'}
-          </button>
+        <p>{isLogin ? "Don't have an account?" : "Already have an account?"}
+          <button onClick={toggleForm} className="switch-form-btn">{isLogin ? ' Sign up here' : ' Login here'}</button>
         </p>
       </div>
     </div>

@@ -2,6 +2,7 @@ from flask import current_app
 from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
+from app.test_connection import MONGO_URI
 
 # Load environment variables
 load_dotenv()
@@ -12,23 +13,26 @@ def init_db(app):
     """
     try:
         # Get MongoDB URI from environment variable
-        mongo_uri = os.getenv('MONGO')
+        mongo_uri = os.getenv('MONGO_URI')
         if not mongo_uri:
             raise ValueError("MongoDB URI not found. Ensure 'MONGO' is set in your .env file.")
 
         # Connect to MongoDB
-        client = MongoClient(mongo_uri)
+        client = MongoClient(MONGO_URI)
         db = client['Nature_Net']  # Use your database name
+
+        # Check if the database is accessible
+        client.server_info()  # Will raise an error if MongoDB is unreachable
 
         # Ensure collections and indexes are created
         initialize_collections(db)
 
         # Store the database in app config
         app.config['DB'] = db
-        print("Database connected successfully!")
+        print("✅ Database connected successfully!")
         return db
     except Exception as e:
-        print(f"Error connecting to MongoDB: {e}")
+        print(f"❌ Error connecting to MongoDB: {e}")
         raise
 
 def initialize_collections(db):
@@ -47,14 +51,14 @@ def initialize_collections(db):
     for collection_name, config in collections.items():
         if collection_name not in db.list_collection_names():
             db.create_collection(collection_name)
-            print(f"Collection '{collection_name}' created.")
+            print(f"🟢 Collection '{collection_name}' created.")
 
         for index in config["indexes"]:
             db[collection_name].create_index(index["key"], unique=index.get("unique", False))
-            print(f"Index created for collection '{collection_name}' on {index['key']}")
+            print(f"🔵 Index created for '{collection_name}' on {index['key']}")
 
 def get_db():
     """
     Get the database connection from the app config.
     """
-    return current_app.config['DB']
+    return current_app.config.get('DB', None)

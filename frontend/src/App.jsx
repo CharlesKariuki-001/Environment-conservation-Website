@@ -11,66 +11,47 @@ import LoginSignupPage from './components/LoginSignupPage';
 import JoinUsPage from './components/JoinUsPage';
 import DonatePage from './components/DonatePage';
 import AboutUsPage from './components/AboutUsPage';
-import AccountPage from './components/AccountPage';
-import ContactPage from './components/ContactPage'; 
-import EnvironmentComponents from './components/EnvironmentComponents'; // ✅ Import EnvironmentComponents
+import ContactPage from './components/ContactPage';
+import EnvironmentComponents from './components/EnvironmentComponents';
 
 const App = () => {
-  const [components, setComponents] = useState([]);
-  const [isAuthenticated, setIsAuthenticated] = useState(false); 
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Fetch the environmental components from the backend API
-  useEffect(() => {
-    const backendUrl = 'http://localhost:5000/api/environment-components'; 
-    fetch(backendUrl)
-      .then((response) => response.json())
-      .then((data) => setComponents(data))
-      .catch((error) => console.error('Error fetching components:', error));
-  }, []);
-
-  // Check if the user is authenticated by checking for a JWT token in localStorage
+  // Function to check authentication state
   useEffect(() => {
     const token = localStorage.getItem('token');
-    if (token) {
-      setIsAuthenticated(true); 
-    }
+    setIsAuthenticated(!!token); // Set authentication state based on token presence
   }, []);
 
   return (
     <Router>
       <div className="App">
-        {/* Only show Navbar if authenticated */}
-        {isAuthenticated && <Navbar isAuthenticated={isAuthenticated} />}
+        {isAuthenticated && <Navbar />}
 
         <main>
           <Routes>
-            {/* Routes for users not authenticated */}
+            {/* If user is NOT authenticated, show the login/signup page first */}
             {!isAuthenticated ? (
               <>
-                <Route path="/login" element={<LoginSignupPage type="login" />} />
-                <Route path="/signup" element={<LoginSignupPage type="signup" />} />
-                <Route path="*" element={<Navigate to="/login" />} />
+                <Route path="/login" element={<LoginSignupPage setIsAuthenticated={setIsAuthenticated} />} />
+                <Route path="/signup" element={<LoginSignupPage setIsAuthenticated={setIsAuthenticated} />} />
+                <Route path="*" element={<Navigate to="/login" />} /> {/* Redirect to login */}
               </>
             ) : (
               <>
-                {/* Routes for authenticated users */}
-                <Route path="/" element={<HomePage components={components} />} />
+                <Route path="/" element={<HomePage />} />
                 <Route path="/admin" element={<AdminPage />} />
                 <Route path="/join-us" element={<JoinUsPage />} />
                 <Route path="/donate" element={<DonatePage />} />
                 <Route path="/about-us" element={<AboutUsPage />} />
-                <Route path="/account" element={<AccountPage />} />
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path="/environment-components" element={<EnvironmentComponents />} />
-                
-                {/* Fallback route */}
-                <Route path="*" element={<Navigate to="/" />} />
+                <Route path="*" element={<Navigate to="/" />} /> {/* Redirect to home */}
               </>
             )}
           </Routes>
         </main>
 
-        {/* Only show Footer if authenticated */}
         {isAuthenticated && <Footer />}
       </div>
     </Router>

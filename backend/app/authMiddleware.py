@@ -1,4 +1,5 @@
 import jwt
+import os
 from flask import request, jsonify
 from functools import wraps
 
@@ -14,13 +15,15 @@ def token_required(f):
             return jsonify({'message': 'Token is missing!'}), 403
 
         try:
-            # Decode the token to get user info
-            data = jwt.decode(token, 'secret_key', algorithms=['HS256'])
+            # Decode the token using the secret key from the environment
+            secret_key = os.getenv('SECRET_KEY')
+            data = jwt.decode(token, secret_key, algorithms=['HS256'])
             current_user = data['username']
-        except:
+        except jwt.ExpiredSignatureError:
+            return jsonify({'message': 'Token has expired!'}), 403
+        except jwt.InvalidTokenError:
             return jsonify({'message': 'Token is invalid!'}), 403
 
         return f(current_user, *args, **kwargs)
 
     return decorated_function
-()
